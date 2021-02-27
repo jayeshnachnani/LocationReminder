@@ -15,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.reminderslist.ReminderListFragment
-import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragmentDirections
+//import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragmentDirections
 
 /**
  * This class should be the starting point of the app, It asks the users to sign in / register, and redirects the
@@ -108,6 +108,7 @@ class AuthenticationActivity : AppCompatActivity() {
                     val reminderActivityIntent =
                     Intent(applicationContext, RemindersActivity::class.java)
                     startActivity(reminderActivityIntent)
+                    finish()
 
                     //NavigationCommand.To(
                         //AuthenticationActivityDirections.actionAuthenticationActivityToReminderDescriptionActivity())
