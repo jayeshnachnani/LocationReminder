@@ -69,8 +69,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         //         send back the selected location details to the view model
         //         and navigate back to the previous fragment to save the reminder and add the geofence
         //NavigationCommand.BackTo(R.id.saveReminderFragment)
-        _viewModel.navigationCommand.value = NavigationCommand.BackTo(R.id.saveReminderFragment)
-        //_viewModel.navigationCommand.postValue(NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment()))
+        //_viewModel.navigationCommand.value = NavigationCommand.BackTo(R.id.saveReminderFragment)
+        _viewModel.navigationCommand.postValue(NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment()))
             //NavigationCommand.To(R.id.saveReminderFragment)
                 //SelectLocationFragmentDirections.toSaveReminder()
            // )
