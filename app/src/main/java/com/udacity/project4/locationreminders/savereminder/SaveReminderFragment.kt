@@ -65,7 +65,7 @@ class SaveReminderFragment : BaseFragment() {
             val latitude = _viewModel.latitude
             val longitude = _viewModel.longitude.value
 
-            _viewModel.saveReminder(ReminderDataItem("test420","tets420","test420",_viewModel.latitude.value,_viewModel.longitude.value))
+            _viewModel.saveReminder(ReminderDataItem(title,description = description.toString(),location = location,latitude = latitude.value,longitude = longitude))
             geofencingClient = LocationServices.getGeofencingClient(requireActivity())
             addGeoFence()
 //            TODO: use the user entered reminder details to:
@@ -85,8 +85,8 @@ class SaveReminderFragment : BaseFragment() {
                 .setRequestId(1.toString())
                 //TO DO: Change to Id
                 //To Do: Change to correct lat long
-                .setCircularRegion(18.28,
-                        73.53,
+                .setCircularRegion(_viewModel.latitude.value!!,
+                        _viewModel.longitude.value!!,
                         GeofencingConstants.GEOFENCE_RADIUS_IN_METERS
                 )
                 .setExpirationDuration(GeofencingConstants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)

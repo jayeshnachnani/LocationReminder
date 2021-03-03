@@ -127,8 +127,12 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
             //Save to DB
             //_viewModel.saveReminder(reminderData = ReminderDataItem(test))
             poiMarker.showInfoWindow()
-            reminderDataItem = ReminderDataItem("test","tets","test",poi.latLng.latitude,poi.latLng.longitude)
+            //reminderDataItem = ReminderDataItem("placeholder","tets","test",poi.latLng.latitude,poi.latLng.longitude)
+            _viewModel.latitude.value = poi.latLng.latitude
+            _viewModel.longitude.value = poi.latLng.longitude
+            _viewModel.reminderSelectedLocationStr.value = poi.name
             onLocationSelected()
+            //_viewModel.saveReminder(reminderDataItem)
             /*reminderDataItem.title = "test"
             reminderDataItem.location = "test"
             reminderDataItem.description = "test"
