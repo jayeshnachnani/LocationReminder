@@ -24,44 +24,28 @@ class RemindersListViewModelTest {
 
     //TODO: provide testing to the RemindersListViewModel and its live data objects
     private val reminder1 = ReminderDTO("testtitle1", "testdescription1", "testlocation1", 18.3,23.3)
-    //private val task2 = Task("Title2", "Description2")
     private val reminder2 = ReminderDTO("testtitle2", "testdescription2", "testlocation2", 18.3,23.3)
-    //private val remoteTasks = listOf(task1, task2).sortedBy { it.id }
-    private val localReminders = listOf(reminder1).sortedBy { it.id }
-    private val newReminders = Result.Success(listOf(reminder1))
-    private val x = Result.Success(localReminders)
-    //private val newReminders1 = Result<ReminderDTO>
+    val reminderList = mutableListOf<ReminderDTO>()
     private lateinit var remindersLocalDataSource: FakeDataSource
-
-    //private lateinit var remindersRepository: RemindersLocalRepository
-
 
     @Before
     fun createDataSource() = runBlockingTest {
-        //tasksRemoteDataSource = FakeDataSource(remoteTasks.toMutableList())
-        remindersLocalDataSource = FakeDataSource(localReminders.toMutableList())
+        remindersLocalDataSource = FakeDataSource(reminderList)
 
-        //remindersLocalDataSource.saveReminder(reminder1)
-        // Get a reference to the class under test
-        /*remindersRepository = RemindersLocalRepository(
-                // TODO Dispatchers.Unconfined should be replaced with Dispatchers.Main
-                //  this requires understanding more about coroutines + testing
-                //  so we will keep this as Unconfined for now.
-                 remindersLocalDataSource, Dispatchers.Unconfined
-        )*/
     }
 
     @Test
     fun getReminders() = runBlockingTest {
 
-        //GIVEN: A reminder
+        //GIVEN: 2 reminders
         remindersLocalDataSource.saveReminder(reminder1)
+        remindersLocalDataSource.saveReminder(reminder2)
 
         // WHEN - Get the reminders
         val loadedlist = remindersLocalDataSource.getReminders()
-        val y = Result.Success(loadedlist)
-        // THEN - The reminders count is 1
-        //assertThat(y,`is`(x))
+
+        // THEN - The reminders count is 2
+        assertThat((loadedlist as Result.Success).data.size,`is`(2))
 
     }
 

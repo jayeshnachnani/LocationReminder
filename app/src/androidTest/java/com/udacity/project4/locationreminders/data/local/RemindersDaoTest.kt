@@ -43,9 +43,9 @@ class RemindersDaoTest {
         val reminder = ReminderDTO("testtitle", "testdescription", "testlocation", 18.3,23.3)
         database.reminderDao().saveReminder(reminder)
 
-        // WHEN - Get the task by id from the database.
+        // WHEN - Get the reminder by id from the database.
         val loaded = database.reminderDao().getReminderById(reminder.id)
-        //getTaskById(task.id)
+
 
         // THEN - The loaded data contains the expected values.
         assertThat<ReminderDTO>(loaded as ReminderDTO, notNullValue())
@@ -61,11 +61,12 @@ class RemindersDaoTest {
 
     @Test
     fun insertRemindersAndGetRemindersCount() = runBlockingTest {
-        // GIVEN - Insert a reminder.
+        // GIVEN - Insert 2 reminders
         val reminder1 = ReminderDTO("testtitle", "testdescription", "testlocation", 18.3,23.3)
         database.reminderDao().saveReminder(reminder1)
         val reminder2 = ReminderDTO("testtitle2", "testdescription2", "testlocation2", 19.3,24.3)
         database.reminderDao().saveReminder(reminder2)
+
         // WHEN - Get the reminders
         val loadedlist = database.reminderDao().getReminders()
 
@@ -76,8 +77,9 @@ class RemindersDaoTest {
 
 
     @After
-    fun closeDb() = database.close()
-
-
+    fun closeDb() = runBlockingTest {
+        database.reminderDao().deleteAllReminders()
+        database.close()
+    }
 
 }
