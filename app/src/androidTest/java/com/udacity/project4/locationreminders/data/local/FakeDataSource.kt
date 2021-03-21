@@ -1,5 +1,6 @@
-package com.udacity.project4.locationreminders.data
+package com.udacity.project4.locationreminders.data.local
 
+import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
 
@@ -9,14 +10,14 @@ class FakeDataSource (var reminders: MutableList<ReminderDTO>? = mutableListOf()
 //    TODO: Create a fake data source to act as a double to the real data source
 
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
-        //TODO("Return the reminders")
+        TODO("Return the reminders")
         reminders?.let { return Result.Success(ArrayList(it)) }
         return Result.Error("Tasks not found")
 
     }
 
     override suspend fun saveReminder(reminder: ReminderDTO) {
-        //TODO("save the reminder")
+        TODO("save the reminder")
         reminders?.add(reminder)
     }
 
@@ -25,7 +26,7 @@ class FakeDataSource (var reminders: MutableList<ReminderDTO>? = mutableListOf()
     }
 
     override suspend fun deleteAllReminders() {
-        //TODO("delete all the reminders")
+        TODO("delete all the reminders")
         reminders?.clear()
     }
 
