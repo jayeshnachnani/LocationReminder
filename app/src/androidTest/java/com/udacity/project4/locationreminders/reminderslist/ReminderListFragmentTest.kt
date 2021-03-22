@@ -29,69 +29,12 @@ import org.mockito.Mockito
 //UI Testing
 @MediumTest
 class ReminderListFragmentTest {
-
-
-//    TODO: test the navigation of the fragments.
-//    TODO: test the displayed data on the UI.
-//    TODO: add testing for the error messages.
-
     private val reminder1 = ReminderDTO("testtitle1", "testdescription1", "testlocation1", 18.3, 23.3)
-    private val reminder2 = ReminderDTO("testtitle2", "testdescription2", "testlocation2", 18.3, 23.3)
     private val localReminders: MutableList<ReminderDTO> = mutableListOf(reminder1)
-    private val newReminders = Result.Success(listOf(reminder1))
-    private val x = Result.Success(localReminders)
-
-    //private val newReminders1 = Result<ReminderDTO>
-    private lateinit var remindersLocalDataSource: FakeDataSource
-    val reminderList = mutableListOf<ReminderDTO>()
-
-    @Before
-    fun createDataSource() = runBlockingTest {
-        //tasksRemoteDataSource = FakeDataSource(remoteTasks.toMutableList())
-        remindersLocalDataSource = FakeDataSource(reminderList)
-        remindersLocalDataSource.saveReminder(reminder1)
-
-        //remindersLocalDataSource.saveReminder(reminder1)
-        // Get a reference to the class under test
-        /*remindersRepository = RemindersLocalRepository(
-                // TODO Dispatchers.Unconfined should be replaced with Dispatchers.Main
-                //  this requires understanding more about coroutines + testing
-                //  so we will keep this as Unconfined for now.
-                 remindersLocalDataSource, Dispatchers.Unconfined
-        )*/
-    }
-
-    @After
-    fun cleanupDataSource() = runBlockingTest {
-        remindersLocalDataSource.deleteAllReminders()
-        //localReminders.removeAll(localReminders)
-
-
-    }
-
-    @Test
-    fun activeTaskDetails_DisplayedInUi() = runBlockingTest {
-        // GIVEN - Add active (incomplete) task to the DB
-        remindersLocalDataSource.saveReminder(reminder1)
-
-
-        // WHEN - Details fragment launched to display task
-        launchFragmentInContainer<ReminderListFragment>(null, R.style.AppTheme)
-
-
-        // THEN - Task details are displayed on the screen
-        // make sure that the title/description are both shown and correct
-        onView(withId(R.id.reminderTitle)).check(matches(isDisplayed()))
-        onView(withId(R.id.reminderTitle)).check(matches(withText("testtitle1")))
-        onView(withId(R.id.reminderDescription)).check(matches(isDisplayed()))
-        onView(withId(R.id.reminderDescription)).check(matches(withText("testdescription1")))
-        // and make sure the "active" checkbox is shown unchecked
-
-    }
 
     @Test
     fun clickAddReminder_navigateTo_AddReminderFragment() {
-        // GIVEN - On the Reminder List screen
+        // GIVEN - Reminder List screen
 
         val fragmentScenario = launchFragmentInContainer<ReminderListFragment>(null, R.style.AppTheme)
         val navController = Mockito.mock(NavController::class.java)
