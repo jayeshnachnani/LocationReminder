@@ -17,14 +17,14 @@ class ReminderListFragment : BaseFragment() {
     override val _viewModel: RemindersListViewModel by viewModel()
     private lateinit var binding: FragmentRemindersBinding
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_reminders, container, false
-            )
+                DataBindingUtil.inflate(
+                        inflater,
+                        R.layout.fragment_reminders, container, false
+                )
         binding.viewModel = _viewModel
 
         setHasOptionsMenu(true)
@@ -54,9 +54,9 @@ class ReminderListFragment : BaseFragment() {
     private fun navigateToAddReminder() {
         //use the navigationCommand live data to navigate between the fragments
         _viewModel.navigationCommand.postValue(
-            NavigationCommand.To(
-                ReminderListFragmentDirections.toSaveReminder()
-            )
+                NavigationCommand.To(
+                        ReminderListFragmentDirections.toSaveReminder()
+                )
         )
     }
 

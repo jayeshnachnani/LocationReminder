@@ -45,13 +45,13 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
                 val foundIndex = GeofencingConstants.LANDMARK_DATA.indexOfFirst {
                     it.id == fenceId
                 }
-                if ( -1 == foundIndex ) {
+                if (-1 == foundIndex) {
                     Log.e(TAG, "Unknown Geofence: Abort Mission")
                     return
                 }
                 val notificationManager = ContextCompat.getSystemService(
-                    context,
-                    NotificationManager::class.java
+                        context,
+                        NotificationManager::class.java
                 ) as NotificationManager
 
                 /*notificationManager.sendGeofenceEnteredNotification(

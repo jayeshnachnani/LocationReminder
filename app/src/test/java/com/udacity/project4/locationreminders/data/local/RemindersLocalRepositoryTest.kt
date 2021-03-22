@@ -2,19 +2,17 @@ package com.udacity.project4.locationreminders.data.local
 
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
-import kotlinx.coroutines.Dispatchers
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class RemindersLocalRepositoryTest {
 
 
-    private val reminder1 = ReminderDTO("testtitle1", "testdescription1", "testlocation1", 18.3,23.3)
+    private val reminder1 = ReminderDTO("testtitle1", "testdescription1", "testlocation1", 18.3, 23.3)
+
     //private val task2 = Task("Title2", "Description2")
-    private val reminder2 = ReminderDTO("testtitle2", "testdescription2", "testlocation2", 18.3,23.3)
+    private val reminder2 = ReminderDTO("testtitle2", "testdescription2", "testlocation2", 18.3, 23.3)
+
     //private val remoteTasks = listOf(task1, task2).sortedBy { it.id }
     private val localReminders = listOf(reminder1).sortedBy { it.id }
     private val newTasks = listOf(reminder2).sortedBy { it.id }

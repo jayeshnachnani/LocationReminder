@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--navigation xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -44,16 +43,16 @@
         <action
             android:id="@+id/action_authenticationActivity_to_reminderListFragment"
             app:destination="@id/reminderListFragment" /-->
-    <!--/activity>
-    <activity
-        android:id="@+id/mapsActivity"
-        android:name="com.udacity.project4.map.MapsActivity"
-        android:label="activity_maps"
-        tools:layout="@layout/activity_maps" />
-    <activity
-        android:id="@+id/reminderDescriptionActivity"
-        android:name="com.udacity.project4.locationreminders.ReminderDescriptionActivity"
-        android:label="ReminderDescriptionActivity" />
+<!--/activity>
+<activity
+    android:id="@+id/mapsActivity"
+    android:name="com.udacity.project4.map.MapsActivity"
+    android:label="activity_maps"
+    tools:layout="@layout/activity_maps" />
+<activity
+    android:id="@+id/reminderDescriptionActivity"
+    android:name="com.udacity.project4.locationreminders.ReminderDescriptionActivity"
+    android:label="ReminderDescriptionActivity" />
 
 </navigation-->
 
@@ -88,7 +87,7 @@
     <fragment
         android:id="@+id/selectLocationFragment"
         android:name="com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragment"
-        android:label="Select Location" >
+        android:label="Select Location">
         <action
             android:id="@+id/action_selectLocationFragment_to_saveReminderFragment"
             app:destination="@id/saveReminderFragment" />

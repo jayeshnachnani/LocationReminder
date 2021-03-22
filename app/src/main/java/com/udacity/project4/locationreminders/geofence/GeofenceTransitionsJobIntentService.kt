@@ -25,9 +25,9 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
         //        TODO: call this to start the JobIntentService to handle the geofencing transition events
         fun enqueueWork(context: Context, intent: Intent) {
             enqueueWork(
-                context,
-                GeofenceTransitionsJobIntentService::class.java, JOB_ID,
-                intent
+                    context,
+                    GeofenceTransitionsJobIntentService::class.java, JOB_ID,
+                    intent
             )
         }
     }
@@ -52,14 +52,14 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
                 val reminderDTO = result.data
                 //send a notification to the user with the reminder details
                 sendNotification(
-                    this@GeofenceTransitionsJobIntentService, ReminderDataItem(
+                        this@GeofenceTransitionsJobIntentService, ReminderDataItem(
                         reminderDTO.title,
                         reminderDTO.description,
                         reminderDTO.location,
                         reminderDTO.latitude,
                         reminderDTO.longitude,
                         reminderDTO.id
-                    )
+                )
                 )
             }
         }

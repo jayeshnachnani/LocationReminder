@@ -7,12 +7,15 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
@@ -30,17 +33,17 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var map: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var lastLocation: Location
-    private  lateinit var reminderDataItem: ReminderDataItem
+    private lateinit var reminderDataItem: ReminderDataItem
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.fragment_select_location, container, false)
 
         binding.viewModel = _viewModel
         binding.lifecycleOwner = this
@@ -71,9 +74,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         //NavigationCommand.BackTo(R.id.saveReminderFragment)
         //_viewModel.navigationCommand.value = NavigationCommand.BackTo(R.id.saveReminderFragment)
         _viewModel.navigationCommand.postValue(NavigationCommand.To(SelectLocationFragmentDirections.actionSelectLocationFragmentToSaveReminderFragment()))
-            //NavigationCommand.To(R.id.saveReminderFragment)
-                //SelectLocationFragmentDirections.toSaveReminder()
-           // )
+        //NavigationCommand.To(R.id.saveReminderFragment)
+        //SelectLocationFragmentDirections.toSaveReminder()
+        // )
         //)
     }
 
@@ -117,10 +120,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
             val poiMarker = map.addMarker(
-                MarkerOptions()
-                    .position(poi.latLng)
-                    .title(poi.name)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    MarkerOptions()
+                            .position(poi.latLng)
+                            .title(poi.name)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
 
 
             )
@@ -146,9 +149,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     private fun askPermissionAndMovetoCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this.requireContext(),
-                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this.requireActivity(),
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
 
         }
         map.isMyLocationEnabled = true

@@ -36,11 +36,11 @@ class SaveReminderFragment : BaseFragment() {
     private lateinit var geofencingClient: GeofencingClient
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
+                DataBindingUtil.inflate(inflater, R.layout.fragment_save_reminder, container, false)
 
         setDisplayHomeAsUpEnabled(true)
 
@@ -53,9 +53,9 @@ class SaveReminderFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         binding.selectLocation.setOnClickListener {
-                       //Navigate to another fragment to get the user location
+            //Navigate to another fragment to get the user location
             _viewModel.navigationCommand.value =
-                NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
+                    NavigationCommand.To(SaveReminderFragmentDirections.actionSaveReminderFragmentToSelectLocationFragment())
         }
 
         binding.saveReminder.setOnClickListener {
@@ -65,7 +65,7 @@ class SaveReminderFragment : BaseFragment() {
             val latitude = _viewModel.latitude
             val longitude = _viewModel.longitude.value
 
-            _viewModel.saveReminder(ReminderDataItem(title,description = description.toString(),location = location,latitude = latitude.value,longitude = longitude))
+            _viewModel.saveReminder(ReminderDataItem(title, description = description.toString(), location = location, latitude = latitude.value, longitude = longitude))
             geofencingClient = LocationServices.getGeofencingClient(requireActivity())
             addGeoFence()
 //            TODO: use the user entered reminder details to:
@@ -80,7 +80,7 @@ class SaveReminderFragment : BaseFragment() {
         _viewModel.onClear()
     }
 
-    private fun addGeoFence(){
+    private fun addGeoFence() {
         val geofence = Geofence.Builder()
                 .setRequestId(1.toString())
                 //TO DO: Change to Id

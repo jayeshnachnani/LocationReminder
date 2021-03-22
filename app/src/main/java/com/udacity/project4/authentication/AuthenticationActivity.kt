@@ -8,13 +8,12 @@ import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import com.udacity.project4.R
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.udacity.project4.base.NavigationCommand
+import com.udacity.project4.R
 import com.udacity.project4.locationreminders.RemindersActivity
-import com.udacity.project4.locationreminders.reminderslist.ReminderListFragment
+
 //import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragmentDirections
 
 /**
@@ -38,12 +37,7 @@ class AuthenticationActivity : AppCompatActivity() {
         login.text = "FirstLogin"
         login.setOnClickListener {
             launchSignInFlow()
-            // TODO call launchSignInFlow when authButton is clicked
         }
-//         TODO: Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
-
-//          TODO: If the user was authenticated, send him to RemindersActivity
-
 //          TODO: a bonus is to customize the sign in flow to look nice using :
         //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
 
@@ -70,26 +64,25 @@ class AuthenticationActivity : AppCompatActivity() {
         // If users choose to register with their email,
         // they will need to create a password as well.
         val providers = arrayListOf(
-            AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build()
+                AuthUI.IdpConfig.EmailBuilder().build(), AuthUI.IdpConfig.GoogleBuilder().build()
 
-            // This is where you can provide more ways for users to register and
-            // sign in.
+                // This is where you can provide more ways for users to register and
+                // sign in.
         )
 
         // Create and launch sign-in intent.
         // We listen to the response of this activity with the
         // SIGN_IN_REQUEST_CODE
         startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build(),
-            AuthenticationActivity.SIGN_IN_REQUEST_CODE
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setAvailableProviders(providers)
+                        .build(),
+                AuthenticationActivity.SIGN_IN_REQUEST_CODE
         )
     }
 
     private fun observeAuthenticationState() {
-        //val factToDisplay = viewModel.getFactToDisplay(requireContext())
 
 
         viewModel.authenticationState.observe(this, Observer { authenticationState ->
@@ -100,21 +93,21 @@ class AuthenticationActivity : AppCompatActivity() {
                 // you can customize the welcome message they see by
                 // utilizing the getFactWithPersonalization() function provided
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
-                   // binding.welcomeText.text = getFactWithPersonalization(factToDisplay)
+                    // binding.welcomeText.text = getFactWithPersonalization(factToDisplay)
                     /*login.text = getString(R.string.logout_text)
                     login.setOnClickListener {
                         // TODO implement logging out user in next step
                     }*/
                     val reminderActivityIntent =
-                    Intent(applicationContext, RemindersActivity::class.java)
+                            Intent(applicationContext, RemindersActivity::class.java)
                     startActivity(reminderActivityIntent)
                     finish()
 
                     //NavigationCommand.To(
-                        //AuthenticationActivityDirections.actionAuthenticationActivityToReminderDescriptionActivity())
+                    //AuthenticationActivityDirections.actionAuthenticationActivityToReminderDescriptionActivity())
 
                     //val reminderActivityIntent =
-                        //Intent(applicationContext, RemindersActivity::class.java)
+                    //Intent(applicationContext, RemindersActivity::class.java)
 
                     //startActivity(reminderActivityIntent)
                     //NavigationCommand.To()

@@ -1,8 +1,7 @@
 package com.udacity.project4.map
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -21,7 +20,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(R.layout.activity_maps)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
+                .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
@@ -41,17 +40,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val kondhwa = LatLng(18.28, 73.53)
         val zoomLevel = 10f
         map.addMarker(MarkerOptions().position(kondhwa).title("Marker in Kondhwa"))
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom((kondhwa),zoomLevel))
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom((kondhwa), zoomLevel))
         setPoiClick(map)
     }
 
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
             val poiMarker = map.addMarker(
-                MarkerOptions()
-                    .position(poi.latLng)
-                    .title(poi.name)
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    MarkerOptions()
+                            .position(poi.latLng)
+                            .title(poi.name)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
 
 
             )
