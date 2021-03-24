@@ -1,11 +1,17 @@
 package com.udacity.project4.locationreminders.savereminder
 
+import android.Manifest
+import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.Geofence
 import com.google.android.gms.location.GeofencingClient
@@ -15,7 +21,10 @@ import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
-import com.udacity.project4.locationreminders.geofence.GeoFenceMainActivity.Companion.ACTION_GEOFENCE_EVENT
+import com.udacity.project4.locationreminders.REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+import com.udacity.project4.locationreminders.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+import com.udacity.project4.locationreminders.RemindersActivity.Companion.ACTION_GEOFENCE_EVENT
+//import com.udacity.project4.locationreminders.geofence.GeoFenceMainActivity.Companion.ACTION_GEOFENCE_EVENT
 import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
 import com.udacity.project4.locationreminders.geofence.GeofencingConstants
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
@@ -34,6 +43,8 @@ class SaveReminderFragment : BaseFragment() {
     }
 
     private lateinit var geofencingClient: GeofencingClient
+    private val runningQOrLater = android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.Q
 
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?,
@@ -82,7 +93,7 @@ class SaveReminderFragment : BaseFragment() {
 
     private fun addGeoFence() {
         val geofence = Geofence.Builder()
-                .setRequestId(1.toString())
+                .setRequestId(_viewModel.reminderTitle.toString())
                 //TO DO: Change to Id
                 //To Do: Change to correct lat long
                 .setCircularRegion(_viewModel.latitude.value!!,
@@ -97,5 +108,42 @@ class SaveReminderFragment : BaseFragment() {
                 .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER)
                 .addGeofence(geofence)
                 .build()
+
+        if (ActivityCompat.checkSelfPermission(this.requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestForegroundAndBackgroundLocationPermissions()
+            return
+        }
+        geofencingClient.addGeofences(geofencingRequest, geofencePendingIntent)?.run {
+            addOnSuccessListener {
+
+                Log.e("Add Geofence", geofence.requestId)
+                //_viewModel.geofenceActivated()
+            }
+            addOnFailureListener {
+                if ((it.message != null)) {
+                    Log.e("Couldn't add Geofence", geofence.requestId)
+                }
+            }
+        }
+    }
+
+
+    @TargetApi(29)
+    private fun requestForegroundAndBackgroundLocationPermissions() {
+
+        var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        val resultCode = when {
+            runningQOrLater -> {
+                permissionsArray += Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+            }
+            else -> REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+        }
+        //Log.d(com.udacity.project4.locationreminders.geofence.TAG, "Request foreground only location permission")
+        ActivityCompat.requestPermissions(
+                this.requireActivity().parent,
+                permissionsArray,
+                resultCode
+        )
     }
 }

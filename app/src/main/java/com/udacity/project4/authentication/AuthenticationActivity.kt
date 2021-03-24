@@ -50,6 +50,7 @@ class AuthenticationActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 // User successfully signed in
                 Log.i(TAG, "Successfully signed in user ${FirebaseAuth.getInstance().currentUser?.displayName}!")
+
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check

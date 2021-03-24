@@ -147,6 +147,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    //Referred to https://www.raywenderlich.com/230-introduction-to-google-maps-api-for-android-with-kotlin
+    // to get steps for Google Maps API
     private fun askPermissionAndMovetoCurrentLocation() {
         if (ActivityCompat.checkSelfPermission(this.requireContext(),
                         android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
