@@ -79,7 +79,7 @@ class RemindersActivity : AppCompatActivity() {
     }
 
     @TargetApi(29)
-    private fun requestForegroundAndBackgroundLocationPermissions() {
+    fun requestForegroundAndBackgroundLocationPermissions() {
         if (foregroundAndBackgroundLocationPermissionApproved())
             return
         var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -99,7 +99,7 @@ class RemindersActivity : AppCompatActivity() {
     }
 
     @TargetApi(29)
-    private fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
+    fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
         val foregroundLocationApproved = (
                 PackageManager.PERMISSION_GRANTED ==
                         ActivityCompat.checkSelfPermission(this,
@@ -116,7 +116,7 @@ class RemindersActivity : AppCompatActivity() {
         return foregroundLocationApproved && backgroundPermissionApproved
     }
 
-    private fun checkDeviceLocationSettingsAndStartGeofence(resolve: Boolean = true) {
+    fun checkDeviceLocationSettingsAndStartGeofence(resolve: Boolean = true) {
         val locationRequest = LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_LOW_POWER
         }

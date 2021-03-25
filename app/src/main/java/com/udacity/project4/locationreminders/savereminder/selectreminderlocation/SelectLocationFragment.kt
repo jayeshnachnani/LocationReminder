@@ -1,9 +1,12 @@
 package com.udacity.project4.locationreminders.savereminder.selectreminderlocation
 
 
+import android.Manifest
+import android.annotation.TargetApi
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
@@ -16,10 +19,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSelectLocationBinding
+import com.udacity.project4.locationreminders.REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+import com.udacity.project4.locationreminders.REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+import com.udacity.project4.locationreminders.RemindersActivity
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
@@ -34,6 +41,8 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var lastLocation: Location
     private lateinit var reminderDataItem: ReminderDataItem
+    private val runningQOrLater = android.os.Build.VERSION.SDK_INT >=
+            android.os.Build.VERSION_CODES.Q
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -111,9 +120,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         //map.addMarker(MarkerOptions().position(kondhwa).title("Marker in Kondhwa"))
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom((kondhwa),zoomLevel))
         //map.moveCamera(CameraUpdateFactory.newLatLngBounds(La))
-        setPoiClick(map)
         //TODO: zoom to the user location after taking his permission
         askPermissionAndMovetoCurrentLocation()
+        setPoiClick(map)
 
     }
 
@@ -150,25 +159,100 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     //Referred to https://www.raywenderlich.com/230-introduction-to-google-maps-api-for-android-with-kotlin
     // to get steps for Google Maps API
     private fun askPermissionAndMovetoCurrentLocation() {
-        if (ActivityCompat.checkSelfPermission(this.requireContext(),
-                        android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this.requireActivity(),
-                    arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
-
+        if (foregroundAndBackgroundLocationPermissionApproved()) {
+            moveToCurrentLocation()
+        } else {
+            requestForegroundAndBackgroundLocationPermissions()
         }
-        map.isMyLocationEnabled = true
-        fusedLocationClient.lastLocation.addOnSuccessListener(this.requireActivity()) { location ->
-            // Got last known location. In some rare situations this can be null.
-            // 3
-            if (location != null) {
-                lastLocation = location
-                val currentLatLng = LatLng(location.latitude, location.longitude)
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
-            }
-        }
-
         return
 
+    }
+
+    private fun moveToCurrentLocation(){
+            if (ActivityCompat.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestForegroundAndBackgroundLocationPermissions()
+            } else {
+                map.isMyLocationEnabled = true
+                fusedLocationClient.lastLocation.addOnSuccessListener(this.requireActivity()) { location ->
+                    // Got last known location. In some rare situations this can be null.
+                    // 3
+                    if (location != null) {
+                        lastLocation = location
+                        val currentLatLng = LatLng(location.latitude, location.longitude)
+                        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 12f))
+                    }
+                }
+            }
+
+
+    }
+
+    @TargetApi(29)
+    fun requestForegroundAndBackgroundLocationPermissions() {
+        if (foregroundAndBackgroundLocationPermissionApproved())
+            return
+        var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        val resultCode = when {
+            runningQOrLater -> {
+                permissionsArray += Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+            }
+            else -> REQUEST_FOREGROUND_ONLY_PERMISSIONS_REQUEST_CODE
+        }
+        //Log.d(com.udacity.project4.locationreminders.geofence.TAG, "Request foreground only location permission")
+        ActivityCompat.requestPermissions(
+                this.requireActivity().parent,
+                permissionsArray,
+                resultCode
+        )
+    }
+
+    @TargetApi(29)
+    fun foregroundAndBackgroundLocationPermissionApproved(): Boolean {
+        val foregroundLocationApproved = (
+                PackageManager.PERMISSION_GRANTED ==
+                        ActivityCompat.checkSelfPermission(this.requireContext(),
+                                Manifest.permission.ACCESS_FINE_LOCATION))
+        val backgroundPermissionApproved =
+                if (runningQOrLater) {
+                    PackageManager.PERMISSION_GRANTED ==
+                            ActivityCompat.checkSelfPermission(
+                                    this.requireContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                            )
+                } else {
+                    true
+                }
+        return foregroundLocationApproved && backgroundPermissionApproved
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
+    ) {
+        Log.d(com.udacity.project4.locationreminders.TAG, "onRequestPermissionResult")
+
+        if (
+                grantResults.isEmpty() ||
+                grantResults[com.udacity.project4.locationreminders.LOCATION_PERMISSION_INDEX] == PackageManager.PERMISSION_DENIED ||
+                (requestCode == com.udacity.project4.locationreminders.REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE &&
+                        grantResults[com.udacity.project4.locationreminders.BACKGROUND_LOCATION_PERMISSION_INDEX] ==
+                        PackageManager.PERMISSION_DENIED)) {
+            Snackbar.make(
+                    this.requireView(),
+                    R.string.permission_denied_explanation,
+                    Snackbar.LENGTH_INDEFINITE
+            )
+                    /*.setAction(R.string.settings) {
+                        startActivity(Intent().apply {
+                            action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                            data = Uri.fromParts("package", BuildConfig.APPLICATION_ID, null)
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        })
+                    }.show()*/
+        } else {
+            moveToCurrentLocation()
+        }
     }
 
 
