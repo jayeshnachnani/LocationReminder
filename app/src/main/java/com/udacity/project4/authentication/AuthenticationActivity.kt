@@ -13,6 +13,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.udacity.project4.R
 import com.udacity.project4.locationreminders.RemindersActivity
+import com.udacity.project4.locationreminders.reminderslist.RemindersListAdapter
 
 //import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragmentDirections
 
@@ -79,7 +80,7 @@ class AuthenticationActivity : AppCompatActivity() {
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
                         .build(),
-                AuthenticationActivity.SIGN_IN_REQUEST_CODE
+                SIGN_IN_REQUEST_CODE
         )
     }
 
@@ -95,23 +96,14 @@ class AuthenticationActivity : AppCompatActivity() {
                 // utilizing the getFactWithPersonalization() function provided
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
                     // binding.welcomeText.text = getFactWithPersonalization(factToDisplay)
-                    /*login.text = getString(R.string.logout_text)
+                    login.text = getString(R.string.logout_text) + FirebaseAuth.getInstance().currentUser?.displayName
                     login.setOnClickListener {
-                        // TODO implement logging out user in next step
-                    }*/
+                        AuthUI.getInstance().signOut(this)
+                    }
                     val reminderActivityIntent =
                             Intent(applicationContext, RemindersActivity::class.java)
                     startActivity(reminderActivityIntent)
                     finish()
-
-                    //NavigationCommand.To(
-                    //AuthenticationActivityDirections.actionAuthenticationActivityToReminderDescriptionActivity())
-
-                    //val reminderActivityIntent =
-                    //Intent(applicationContext, RemindersActivity::class.java)
-
-                    //startActivity(reminderActivityIntent)
-                    //NavigationCommand.To()
 
                 }
                 else -> {
