@@ -32,6 +32,7 @@ import com.udacity.project4.locationreminders.savereminder.SaveReminderViewModel
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 
+//Referred to raywenderlich.com to get steps for Google Maps API
 class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
 
     //Use Koin to get the view model of the SaveReminder
@@ -47,7 +48,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
-
+    //Referred to raywenderlich.com to get steps for Google Maps API
     override fun onCreateView(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
