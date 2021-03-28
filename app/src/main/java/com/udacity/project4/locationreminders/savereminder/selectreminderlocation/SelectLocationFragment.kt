@@ -4,6 +4,7 @@ package com.udacity.project4.locationreminders.savereminder.selectreminderlocati
 import android.Manifest
 import android.annotation.TargetApi
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.R
@@ -44,6 +46,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     private lateinit var reminderDataItem: ReminderDataItem
     private val runningQOrLater = android.os.Build.VERSION.SDK_INT >=
             android.os.Build.VERSION_CODES.Q
+    private val TAG = SelectLocationFragment::class.java.simpleName
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -98,15 +101,19 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         // TODO: Change the map type based on the user's selection.
         R.id.normal_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
         }
         R.id.hybrid_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_HYBRID
             true
         }
         R.id.satellite_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_SATELLITE
             true
         }
         R.id.terrain_map -> {
+            map.mapType = GoogleMap.MAP_TYPE_TERRAIN
             true
         }
         else -> super.onOptionsItemSelected(item)
@@ -124,6 +131,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         //TODO: zoom to the user location after taking his permission
         askPermissionAndMovetoCurrentLocation()
         setPoiClick(map)
+        setMapStyle(map)
 
     }
 
@@ -256,5 +264,20 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
+    private fun setMapStyle(map: GoogleMap) {
+        try {
+            // Customize the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            val success = map.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this.requireContext(),
+                            R.raw.maps_style
+                    )
+            )
+        }
+        catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", e)
+        }
+    }
 
 }
