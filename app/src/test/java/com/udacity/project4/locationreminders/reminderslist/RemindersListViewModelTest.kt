@@ -8,10 +8,12 @@ import com.udacity.project4.locationreminders.data.dto.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.`is`
+import org.junit.After
 import org.junit.Assert.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.core.context.stopKoin
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
@@ -46,7 +48,24 @@ class RemindersListViewModelTest {
 
     }
 
+    @Test
+    fun ErrorInGetReminders() = runBlockingTest {
+
+        //GIVEN: Error in reminders
+        remindersLocalDataSource.setReturnError(true)
+        remindersLocalDataSource.saveReminder(reminder1)
+        remindersLocalDataSource.saveReminder(reminder2)
+
+        // WHEN - Get the reminders
+        val loadedlist = remindersLocalDataSource.getReminders()
+
+        // THEN - Error is returned
+        assertThat((loadedlist as Result.Error),`is`(Result.Error("No tasks")))
+
+    }
+    @After
     fun cleanupDataSource() = runBlockingTest {
+        stopKoin()
         remindersLocalDataSource.deleteAllReminders()
 
     }
